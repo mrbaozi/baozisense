@@ -78,98 +78,112 @@ function plot(data, steps, tStart) {
 
     var options = {
         chart: {
-            renderTo: 'container',
-            type: 'line',
             zoomType: 'xy'
         },
         title: {
             text: 'baozisense'
         },
-        series: [{
-            name: 'Temperature',
-            yAxis: 0,
-            pointInterval: steps * 1000,
-            pointStart: tStart * 1000,
-            tooltip: {valueSuffix: ' °C'},
-            data: temp
-        }, {
-            name: 'Humidity',
-            yAxis: 1,
-            pointInterval: steps * 1000,
-            pointStart: tStart * 1000,
-            tooltip: {valueSuffix: ' %'},
-            data: hum
-        }, {
-            name: 'Pressure',
-            yAxis: 2,
-            pointInterval: steps * 1000,
-            pointStart: tStart * 1000,
-            tooltip: {valueSuffix: ' mbar'},
-            data: pres
-        }],
         xAxis: [{
             type: 'datetime',
             minRange: tSpan * 3600000,
             crosshair: true
         }],
-        yAxis: [{
+        yAxis: [{ // Primary yAxis
             labels: {
                 format: '{value} °C',
                 style: {
-                    color: 'Highcharts.getOptions().colors[1]'
+                    color: Highcharts.getOptions().colors[2]
                 }
             },
             title: {
                 text: 'Temperature',
                 style: {
-                    color: 'Highcharts.getOptions().colors[1]'
+                    color: Highcharts.getOptions().colors[2]
                 }
             },
-            opposite: false
-        }, {
+            opposite: true
+
+        }, { // Secondary yAxis
             gridLineWidth: 0,
             title: {
                 text: 'Humidity',
                 style: {
-                    color: 'Highcharts.getOptions().colors[0]'
+                    color: Highcharts.getOptions().colors[0]
                 }
             },
             labels: {
                 format: '{value} %',
                 style: {
-                    color: 'Highcharts.getOptions().colors[0]'
+                    color: Highcharts.getOptions().colors[0]
                 }
-            },
-            opposite: true
-        }, {
+            }
+
+        }, { // Tertiary yAxis
             gridLineWidth: 0,
             title: {
                 text: 'Pressure',
                 style: {
-                    color: 'Highcharts.getOptions().colors[2]'
+                    color: Highcharts.getOptions().colors[1]
                 }
             },
             labels: {
                 format: '{value} mbar',
                 style: {
-                    color: 'Highcharts.getOptions().colors[2]'
+                    color: Highcharts.getOptions().colors[1]
                 }
             },
             opposite: true
         }],
             tooltip: {
-                shared: true,
+                shared: true
             },
             legend: {
-                layout: 'horizontal',
-                align: 'center',
-                x: 0,
+                layout: 'vertical',
+                align: 'left',
+                x: 80,
                 verticalAlign: 'top',
-                y: 40,
-                floating: false,
-                backgroundColor: "(Highcharts.theme && Highcharts.theme.legendBackgroundColor)"
+                y: 55,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
             },
-    }
+            series: [{
+                name: 'Humidity',
+                type: 'line',
+                yAxis: 1,
+                pointInterval: steps * 1000,
+                pointStart: tStart * 1000,
+                data: hum,
+                tooltip: {
+                    valueSuffix: ' %'
+                }
+
+            }, {
+                name: 'Pressure',
+                type: 'line',
+                yAxis: 2,
+                pointInterval: steps * 1000,
+                pointStart: tStart * 1000,
+                data: pres,
+                marker: {
+                    enabled: false
+                },
+                dashStyle: 'shortdot',
+                tooltip: {
+                    valueSuffix: ' mbar'
+                }
+
+            }, {
+                name: 'Temperature',
+                type: 'line',
+                pointInterval: steps * 1000,
+                pointStart: tStart * 1000,
+                data: temp,
+                tooltip: {
+                    valueSuffix: ' °C'
+                }
+            }]
+    };
 
     var chart = new Highcharts.Chart(options);
 }
+
