@@ -17,7 +17,7 @@ name = names[timespan]
 
 dst = 7200 if localtime()[-1] else 3600
 
-data = rrdtool.fetch('/var/www/html/baozisense_dev/sensehat_data.rrd',
+data = rrdtool.fetch('/home/yannick/baozisense_dev/sensehat_data.rrd',
                      "AVERAGE",
                      "--resolution",
                      "%s" %(step),

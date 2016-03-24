@@ -24,6 +24,7 @@ function setData(bf) {
         getTimeSeries(rrd_data, tSpan);
     }
 }
+
 function getTimeSeries(db, tSpan, dbg=false) {
     var nrRRAs = db.getNrRRAs();
     var nrDSs = db.getNrDSs();
@@ -50,34 +51,26 @@ function getTimeSeries(db, tSpan, dbg=false) {
         console.log("nrRows = " + nrRows);
     }
 
-    var timeSeries = [];
-    for (var i = 0; i < nrRows; i++) {
-        var tmpArray = new Array(nrDSs);
-        for (var j = 0; j < nrDSs; j++) {
-            tmpArray[j] = RRA.getElFast(i, j).toFixed(2);
-        }
-        timeSeries.push(tmpArray);
-    }
-
-    plot(timeSeries, dbSteps[idx], db.getLastUpdate());
-}
-
-function plot(data, steps, tStart) {
-    console.log(Date());
-    console.log("steps = " + steps);
-    console.log("tStart = " + tStart);
-
     var temp = [];
     var hum = [];
     var pres = [];
-    for (var i =0; i < data.length; i++) {
-        temp.push(data[i][0]);
-        hum.push(data[i][1]);
-        pres.push(data[i][2]);
+    for (var i = 0; i < nrRows; i++) {
+        temp.push(RRA.getElFast(i, 0));
+        hum.push(RRA.getElFast(i, 1));
+        pres.push(RRA.getElFast(i, 2));
     }
+
+    plot([temp, hum, pres], dbSteps[idx], db.getLastUpdate() - deltaT);
+}
+
+function plot(data, steps, tEnd) {
+    var temp = data[0];
+    var hum = data[1];
+    var pres = data[2];
 
     var options = {
         chart: {
+            renderTo: 'container',
             zoomType: 'xy'
         },
         title: {
@@ -92,44 +85,45 @@ function plot(data, steps, tStart) {
             labels: {
                 format: '{value} °C',
                 style: {
-                    color: Highcharts.getOptions().colors[2]
+                    color: Highcharts.getOptions().colors[0]
                 }
             },
             title: {
                 text: 'Temperature',
                 style: {
-                    color: Highcharts.getOptions().colors[2]
+                    color: Highcharts.getOptions().colors[0]
                 }
             },
-            opposite: true
+            opposite: false
 
         }, { // Secondary yAxis
             gridLineWidth: 0,
             title: {
                 text: 'Humidity',
                 style: {
-                    color: Highcharts.getOptions().colors[0]
+                    color: Highcharts.getOptions().colors[1]
                 }
             },
             labels: {
                 format: '{value} %',
                 style: {
-                    color: Highcharts.getOptions().colors[0]
+                    color: Highcharts.getOptions().colors[1]
                 }
-            }
+            },
+            opposite: true
 
         }, { // Tertiary yAxis
             gridLineWidth: 0,
             title: {
                 text: 'Pressure',
                 style: {
-                    color: Highcharts.getOptions().colors[1]
+                    color: Highcharts.getOptions().colors[2]
                 }
             },
             labels: {
                 format: '{value} mbar',
                 style: {
-                    color: Highcharts.getOptions().colors[1]
+                    color: Highcharts.getOptions().colors[2]
                 }
             },
             opposite: true
@@ -138,20 +132,31 @@ function plot(data, steps, tStart) {
                 shared: true
             },
             legend: {
-                layout: 'vertical',
-                align: 'left',
-                x: 80,
+                layout: 'horizontal',
+                align: 'center',
+                x: 0,
                 verticalAlign: 'top',
-                y: 55,
-                floating: true,
+                y: 30,
+                floating: false,
                 backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
             },
             series: [{
+                name: 'Temperature',
+                type: 'line',
+                yAxis: 0,
+                pointInterval: steps * 1000,
+                pointStart: tEnd * 1000,
+                data: temp,
+                tooltip: {
+                    valueSuffix: ' °C'
+                }
+
+            }, {
                 name: 'Humidity',
                 type: 'line',
                 yAxis: 1,
                 pointInterval: steps * 1000,
-                pointStart: tStart * 1000,
+                pointStart: tEnd * 1000,
                 data: hum,
                 tooltip: {
                     valueSuffix: ' %'
@@ -162,24 +167,10 @@ function plot(data, steps, tStart) {
                 type: 'line',
                 yAxis: 2,
                 pointInterval: steps * 1000,
-                pointStart: tStart * 1000,
+                pointStart: tEnd * 1000,
                 data: pres,
-                marker: {
-                    enabled: false
-                },
-                dashStyle: 'shortdot',
                 tooltip: {
                     valueSuffix: ' mbar'
-                }
-
-            }, {
-                name: 'Temperature',
-                type: 'line',
-                pointInterval: steps * 1000,
-                pointStart: tStart * 1000,
-                data: temp,
-                tooltip: {
-                    valueSuffix: ' °C'
                 }
             }]
     };
