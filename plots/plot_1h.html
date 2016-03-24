@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link href="https://www.highcharts.com/highslide/highslide.css" rel="stylesheet" />
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+        <script type="text/javascript" src="https://code.highcharts.com/highcharts-more.js"></script>
+        <script type="text/javascript" src="https://code.highcharts.com/modules/exporting.js"></script>
+    </head>
+    <body style="margin:0;padding:0">
+                <div id="container" style="width:850px;height:400px;">Loading....</div>
+
+
+    <script>
+        $(function(){
+
+
+ 
+
+
+
+
+            Highcharts.setOptions({"global": {}, "lang": {}});
+            var option = {"colors": {}, "series": {}, "title": {"text": "baozisense"}, "drilldown": {}, "subtitle": {"text": "past 1 hour"}, "navigation": {}, "labels": {}, "yAxis": [{"title": {"text": "Temperature", "style": {"color": Highcharts.getOptions().colors[1]}}, "labels": {"format": "{value} \u00b0C", "style": {"color": Highcharts.getOptions().colors[1]}}, "opposite": false}, {"gridLineWidth": 0, "labels": {"format": "{value} %", "style": {"color": Highcharts.getOptions().colors[0]}}, "opposite": true, "title": {"text": "Humidity", "style": {"color": Highcharts.getOptions().colors[0]}}}, {"gridLineWidth": 0, "labels": {"format": "{value} mbar", "style": {"color": Highcharts.getOptions().colors[2]}}, "opposite": true, "title": {"text": "Pressure", "style": {"color": Highcharts.getOptions().colors[2]}}}], "tooltip": {"shared": true}, "pane": {}, "exporting": {}, "chart": {"width": 850, "zoomType": "xy", "height": 400, "renderTo": "container"}, "credits": {"enabled": false}, "legend": {"verticalAlign": "top", "align": "center", "floating": false, "layout": "horizontal", "y": 40, "x": 0, "backgroundColor": (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'}, "xAxis": [{"crosshair": true, "type": "datetime", "minRange": 3600000}], "plotOptions": {}, "loading": {}};
+
+
+            var data = [{"pointInterval": 60000, "name": "Humidity", "yAxis": 1, "data": [52.32, 52.65, 52.69, 52.25, 52.44, 52.61, 52.74, 52.36, 52.5, 51.05, 52.06, 52.52, 52.26, 52.23, 52.29, 52.36, 52.39, 52.42, 51.97, 52.52, 52.09, 52.62, 52.19, 52.07, 52.29, 52.08, 52.36, 52.32, 51.97, 52.27, 52.33, 52.14, 52.6, 52.7, 52.28, 52.67, 52.58, 52.46, 52.52, 53.44, 53.23, 53.1, 52.73, 53.32, 53.3, 53.29, 53.86, 53.17, 53.39, 53.6, 53.79, 53.56, 53.01, 52.85, 52.85, 52.85, 52.85, 52.85, 52.85, 52.85, 52.85], "tooltip": {"valueSuffix": " %"}, "pointStart": 1458649500000, "type": "line"}, {"name": "Temperature", "data": [21.24, 21.33, 21.4, 21.48, 21.5, 21.44, 21.46, 21.48, 21.5, 21.72, 21.7, 21.85, 21.75, 21.92, 21.89, 21.96, 21.95, 22.0, 21.91, 21.98, 21.91, 22.07, 22.14, 22.15, 22.16, 22.22, 22.31, 22.38, 22.28, 22.22, 22.34, 22.31, 22.31, 22.17, 22.32, 22.33, 22.29, 22.27, 22.2, 22.34, 22.26, 22.31, 22.22, 22.25, 22.27, 22.32, 22.36, 22.29, 22.2, 22.18, 22.3, 22.34, 22.33, 22.46, 22.46, 22.46, 22.46, 22.46, 22.46, 22.46, 22.46], "tooltip": {"valueSuffix": " \u00b0C"}, "pointStart": 1458649500000, "type": "line", "pointInterval": 60000, "yAxis": 0}, {"name": "Pressure", "data": [1004.72, 1004.65, 1004.67, 1004.67, 1004.65, 1004.59, 1004.59, 1004.58, 1004.58, 1004.58, 1004.61, 1004.53, 1004.56, 1004.56, 1004.57, 1004.54, 1004.55, 1004.49, 1004.5, 1004.44, 1004.45, 1004.43, 1004.45, 1004.41, 1004.39, 1004.42, 1004.43, 1004.41, 1004.41, 1004.38, 1004.32, 1004.35, 1004.38, 1004.38, 1004.36, 1004.35, 1004.4, 1004.36, 1004.41, 1004.37, 1004.36, 1004.36, 1004.28, 1004.17, 1004.23, 1004.22, 1004.22, 1004.23, 1004.21, 1004.2, 1004.16, 1004.16, 1004.14, 1004.15, 1004.15, 1004.15, 1004.15, 1004.15, 1004.15, 1004.15, 1004.15], "tooltip": {"valueSuffix": " mbar"}, "pointStart": 1458649500000, "type": "line", "pointInterval": 60000, "yAxis": 2}];
+            option.series = data;
+
+ 
+
+            var chart = new Highcharts.Chart(option);
+
+
+
+
+
+ 
+
+
+        
+    });
+        </script>
+
+    </body>
+</html>
