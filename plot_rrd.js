@@ -69,7 +69,19 @@ function getTimeSeries(db, tSpan, dbg=false) {
     plot([temp, hum, pres], dbSteps[idx], db.getLastUpdate() - deltaT);
 }
 
+Date.prototype.stdTimezoneOffset = function() {
+    var jan = new Date(this.getFullYear(), 0, 1);
+    var jul = new Date(this.getFullYear(), 6, 1);
+    return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+}
+
+Date.prototype.dst = function() {
+    return this.getTimezoneOffset() < this.stdTimezoneOffset();
+}
+
 function plot(data, steps, tEnd) {
+    var today = new Date();
+    dst = today.dst() ? 7200 : 3600;
     var temp = data[0];
     var hum = data[1];
     var pres = data[2];
@@ -154,7 +166,7 @@ function plot(data, steps, tEnd) {
                 type: 'line',
                 yAxis: 1,
                 pointInterval: steps * 1000,
-                pointStart: tEnd * 1000,
+                pointStart: (tEnd + dst) * 1000,
                 data: hum,
                 tooltip: {
                     valueSuffix: ' %'
@@ -165,7 +177,7 @@ function plot(data, steps, tEnd) {
                 type: 'line',
                 yAxis: 0,
                 pointInterval: steps * 1000,
-                pointStart: tEnd * 1000,
+                pointStart: (tEnd + dst) * 1000,
                 data: temp,
                 tooltip: {
                     valueSuffix: ' °C'
@@ -176,7 +188,7 @@ function plot(data, steps, tEnd) {
                 type: 'line',
                 yAxis: 2,
                 pointInterval: steps * 1000,
-                pointStart: tEnd * 1000,
+                pointStart: (tEnd + dst) * 1000,
                 data: pres,
                 tooltip: {
                     valueSuffix: ' mbar'
