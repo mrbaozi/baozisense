@@ -21,7 +21,7 @@ function setData(bf) {
         alert("File " + fname + " is not a valid RRD archive!\n" + err);
     }
     if (rrd_data != undefined) {
-        getTimeSeries(rrd_data, tSpan);
+        getTimeSeries(rrd_data, tSpan, false);
     }
 }
 
@@ -54,10 +54,16 @@ function getTimeSeries(db, tSpan, dbg=false) {
     var temp = [];
     var hum = [];
     var pres = [];
-    for (var i = 0; i < nrRows; i++) {
-        temp.push(RRA.getElFast(i, 0));
-        hum.push(RRA.getElFast(i, 1));
-        pres.push(RRA.getElFast(i, 2));
+    var temp_val = 0;
+    var hum_val = 0;
+    var pres_val = 0;
+    for (var i = dbRows[idx] - nrRows; i < dbRows[idx]; i++) {
+        temp_val = RRA.getElFast(i, 0) == undefined ? temp_val : RRA.getElFast(i, 0);
+        hum_val = RRA.getElFast(i, 1) == undefined ? temp_val : RRA.getElFast(i, 1);
+        pres_val = RRA.getElFast(i, 2) == undefined ? temp_val : RRA.getElFast(i, 2);
+        temp.push(parseFloat(temp_val.toFixed(2)));
+        hum.push(parseFloat(hum_val.toFixed(2)));
+        pres.push(parseFloat(pres_val.toFixed(2)));
     }
 
     plot([temp, hum, pres], dbSteps[idx], db.getLastUpdate() - deltaT);
@@ -85,13 +91,13 @@ function plot(data, steps, tEnd) {
             labels: {
                 format: '{value} °C',
                 style: {
-                    color: Highcharts.getOptions().colors[0]
+                    color: Highcharts.getOptions().colors[1]
                 }
             },
             title: {
                 text: 'Temperature',
                 style: {
-                    color: Highcharts.getOptions().colors[0]
+                    color: Highcharts.getOptions().colors[1]
                 }
             },
             opposite: false
@@ -101,13 +107,13 @@ function plot(data, steps, tEnd) {
             title: {
                 text: 'Humidity',
                 style: {
-                    color: Highcharts.getOptions().colors[1]
+                    color: Highcharts.getOptions().colors[0]
                 }
             },
             labels: {
                 format: '{value} %',
                 style: {
-                    color: Highcharts.getOptions().colors[1]
+                    color: Highcharts.getOptions().colors[0]
                 }
             },
             opposite: true
@@ -131,6 +137,9 @@ function plot(data, steps, tEnd) {
             tooltip: {
                 shared: true
             },
+            credits: {
+                enabled: false
+            },
             legend: {
                 layout: 'horizontal',
                 align: 'center',
@@ -141,17 +150,6 @@ function plot(data, steps, tEnd) {
                 backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
             },
             series: [{
-                name: 'Temperature',
-                type: 'line',
-                yAxis: 0,
-                pointInterval: steps * 1000,
-                pointStart: tEnd * 1000,
-                data: temp,
-                tooltip: {
-                    valueSuffix: ' °C'
-                }
-
-            }, {
                 name: 'Humidity',
                 type: 'line',
                 yAxis: 1,
@@ -160,6 +158,17 @@ function plot(data, steps, tEnd) {
                 data: hum,
                 tooltip: {
                     valueSuffix: ' %'
+                }
+
+            }, {
+                name: 'Temperature',
+                type: 'line',
+                yAxis: 0,
+                pointInterval: steps * 1000,
+                pointStart: tEnd * 1000,
+                data: temp,
+                tooltip: {
+                    valueSuffix: ' °C'
                 }
 
             }, {
@@ -177,4 +186,3 @@ function plot(data, steps, tEnd) {
 
     var chart = new Highcharts.Chart(options);
 }
-
