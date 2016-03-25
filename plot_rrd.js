@@ -1,7 +1,11 @@
 $(document).ready(function() {
     fname = "sensehat_data.rrd";
-    tSpan = 12;
+    tSpan = document.getElementById("range").value;
+    make_plot(fname);
+});
 
+$("#range").change(function() {
+    tSpan = document.getElementById("range").value;
     make_plot(fname);
 });
 
@@ -92,7 +96,7 @@ function plot(data, steps, tEnd) {
             zoomType: 'xy'
         },
         title: {
-            text: 'baozisense'
+            text: 'baozisense - ' + tSpan + ' hours'
         },
         xAxis: [{
             type: 'datetime',
