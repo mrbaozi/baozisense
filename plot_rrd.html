@@ -13,13 +13,18 @@
     <h1>Plot RRD</h1>
 
     Select plot range (hours):
-    <select style="width: 40px" id="range" name="range">
-        <option selected="">1</option>
-        <option>6</option>
-        <option>12</option>
-        <option>24</option>
-        <option>36</option>
-        <option>48</option>
+    <select style="width: 50px" id="range" name="range">
+        <option value="1">1h</option>
+        <option value="6">6h</option>
+        <option selected="" value="12">12h</option>
+        <option value="24">1d</option>
+        <option value="48">2d</option>
+        <option value="168">1w</option>
+        <option value="336">2w</option>
+        <option value="720">1m</option>
+        <option value="1440">2m</option>
+        <option value="4320">6m</option>
+        <option value="8760">1y</option>
     </select>
 
     <body style="margin:0; padding:0">
